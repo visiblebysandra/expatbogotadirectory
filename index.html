@@ -1,0 +1,658 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <link rel="apple-touch-icon" href="LOGO.jpeg" />
+  <link rel="icon" type="image/jpeg" href="LOGO.jpeg" />
+  <link rel="manifest" href="manifest.json" />
+  <meta name="theme-color" content="#cd77f2" />
+
+  <title>Expat Directory Bogotá</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #e4e9f2;
+      margin: 0;
+      padding: 0;
+    }
+    .app-wrapper {
+      max-width: 420px;
+      margin: 0 auto;
+      background-color: #ffffff;
+      min-height: 100vh;
+      position: relative;
+    }
+
+    header {
+      background: linear-gradient(to right, #f263c0, #cd77f2);
+      color: white;
+      padding: 2rem 1rem 1.5rem;
+      text-align: center;
+      box-shadow: 0 2px 12px rgba(0, 0, 0, 0.15);
+      border-radius: 0 0 20px 20px;
+    }
+
+    header img {
+      width: 90px;
+      border-radius: 50%;
+      border: 4px solid white;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+      margin-bottom: 0.5rem;
+    }
+
+    header h1 {
+      margin: 0.5rem 0 0.25rem;
+      font-size: 1.6rem;
+    }
+
+    header p {
+      margin: 0;
+      font-size: 0.95rem;
+      opacity: 0.9;
+    }
+
+    .admin-bar-wrapper {
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      background: #ffffff;
+      display: flex;
+      justify-content: center;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+      border-bottom: 1px solid #eee;
+    }
+
+    .admin-bar {
+      width: 100%;
+      max-width: 420px;
+      padding: 0.5rem 1rem;
+      display: flex;
+      justify-content: space-between;
+      background: #ffffff;
+    }
+
+    .admin-bar button {
+      flex: 1;
+      margin: 0 0.25rem;
+      border: none;
+      background: #cd77f2;
+      color: white;
+      font-weight: bold;
+      padding: 0.6rem 0.5rem;
+      border-radius: 10px;
+      cursor: pointer;
+      font-size: 0.85rem;
+      white-space: nowrap;
+      transition: background 0.2s ease;
+    }
+
+    .admin-bar button:hover {
+      background: #b65de0;
+    }
+
+    main {
+      padding: 1rem;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+      padding-bottom: 6rem; /* creates space for the fixed bottom bar */
+    }
+
+    .card {
+      border-radius: 15px;
+      padding: 1rem;
+      text-align: center;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+      box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
+      color: white;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    .card:nth-child(1) { background-color: #f263c0; }
+    .card:nth-child(2) { background-color: #cd77f2; }
+    .card:nth-child(3) { background-color: #e4e9f2; color: #333; }
+    .card:nth-child(4) { background-color: #f2cea2; color: #333; }
+    .card:nth-child(5) { background-color: #f2541b; }
+    .card:nth-child(6) { background-color: #f263c0; }
+    .card:nth-child(7) { background-color: #cd77f2; }
+    .card:nth-child(8) { background-color: #e4e9f2; color: #333; }
+    .card:nth-child(9) { background-color: #f2cea2; color: #333; }
+    .card:nth-child(10) { background-color: #f263c0; }
+    .card:nth-child(11) { background-color: #cd77f2; }
+    .card:nth-child(12) { background-color: #e4e9f2; color: #333; }
+    .card:nth-child(13) { background-color: #f2cea2; color: #333; }
+    
+    .category-section {
+      display: none;
+      padding: 1rem;
+    }
+
+    .category-section.active {
+      display: block;
+    }
+
+    .entry {
+      background: #f9f9f9;
+      margin: 0.5rem 0;
+      padding: 0.75rem;
+      border-radius: 10px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    }
+
+    .entry strong {
+      font-size: 1rem;
+    }
+
+    .back-btn, .top-back-btn {
+      display: block;
+      margin: 1rem auto;
+      padding: 0.5rem 1rem;
+      background-color: #cd77f2;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 1rem;
+      cursor: pointer;
+      text-align: center;
+    }
+
+    .top-back-btn {
+      margin: 1rem 0;
+      width: fit-content;
+    }
+
+    .footer-nav-wrapper {
+      position: fixed;
+      bottom: 0;
+      width: 100%;
+      display: flex;
+      justify-content: center;
+      z-index: 100;
+      background-color: transparent;
+    }
+
+    .footer-nav {
+      background-color: #ffffff;
+      width: 100%;
+      max-width: 420px;
+      box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.08);
+      padding: 0.5rem 0.75rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-radius: 15px 15px 0 0;
+      box-sizing: border-box;
+    }
+
+   .footer-nav button {
+  flex: 1;
+  margin: 0 0.25rem;
+  border: none;
+  background: #cd77f2;
+  color: white;
+  font-weight: bold;
+  padding: 0.6rem 0.5rem;
+  border-radius: 10px;
+  cursor: pointer;
+  font-size: 0.85rem;
+  transition: background 0.2s ease;
+  white-space: nowrap;
+}
+
+.footer-nav button:hover {
+  background: #b65de0;
+}
+    /* Style for the new disclaimer section */ 
+  #disclaimer { display: none; padding: 1rem; }
+  #disclaimer.active {
+  display: block;
+}
+
+.disclaimer-box {
+  background-color: #fff8f0;
+  border: 1px solid #ffcc99;
+  padding: 1rem;
+  border-radius: 10px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+  color: #333;
+  font-size: 0.95rem;
+}
+
+.disclaimer-box h2 {
+  margin-top: 0;
+  font-size: 1.2rem;
+  color: #b65de0;
+}  
+    .disclaimer-note {
+  font-size: 0.8rem;
+  color: #777;
+  text-align: center;
+  margin-top: 2rem;
+}
+    #suggest,
+#disclaimer {
+  padding-bottom: 6rem;
+}
+
+#suggest .back-btn,
+#disclaimer .back-btn {
+  margin-bottom: 1rem;
+}
+    .category-section .back-btn {
+  margin-bottom: 5rem; /* Adjust based on how much spacing you want */
+}
+
+
+  </style>
+</head>
+<body>
+  <div class="app-wrapper">
+    <header>
+      <img src="LOGO.jpeg" alt="Expat Parents in Bogotá Logo">
+      <h1>Expat Parents in Bogotá</h1>
+      <p>Tap a category to explore resources</p>
+    </header>
+          <p style="font-size: 0.8rem; color: #555; text-align: center; margin-top: 0.5rem;">
+  * Listings are community-contributed and for informational use only.
+</p>
+    <main id="mainMenu">
+      
+      <div class="card" onclick="showCategory('health')">🏥<br>Health & Medical</div>
+      <div class="card" onclick="showCategory('education')">🎓<br>Education</div>
+      <div class="card" onclick="showCategory('transport')">🚗<br>Transportation</div>
+      <div class="card" onclick="showCategory('home')">🧹<br>Home Services & Childcare</div>
+      <div class="card" onclick="showCategory('style')">👗<br>Style & Tailoring</div>
+      <div class="card" onclick="showCategory('pets')">🐾<br>Pets & Vets</div>
+      <div class="card" onclick="showCategory('realestate')">🏡<br>Real Estate</div>
+      <div class="card" onclick="showCategory('food')">🛒<br>Food & Markets</div>
+      <div class="card" onclick="showCategory('tech')">💻<br>Tech & Repairs</div>
+      <div class="card" onclick="showCategory('kids')">🎉<br>Kids Activities</div>
+      <div class="card" onclick="showCategory('fitness')">🏋️‍♀️<br>Fitness & Trainers</div>
+      <div class="card" onclick="showCategory('spa')">💆<br>Spa & Wellness</div>
+      <div class="card" onclick="showCategory('travel')">💆<br>Travel</div>
+
+
+  </main>
+    <!-- CATEGORY: Health & Medical -->
+    <div id="health" class="category-section">
+      <h2>🏥 Health & Medical</h2>
+      <p class="disclaimer-note" style="font-size: 0.75rem; color: #666; text-align: center; margin-top: 1.5rem;">
+  * This list is shared by members and does not imply endorsement.
+      </p>
+      <button class="top-back-btn" onclick="goBack()">← Back</button>
+
+
+   <label for="doctorFilter"><strong>Filter by Type of Doctor:</strong></label>
+      <select id="doctorFilter" onchange="filterDoctors()">
+        <option value="all">All</option>
+        <option value="pediatrician">Pediatrician</option>
+        <option value="dentist">Dentist</option>
+        <option value="dermatologist">Dermatologist</option>
+        <option value="ent">ENT</option>
+        <option value="general">General Doctor</option>
+        <option value="homecare">Home Care</option>
+        <option value="endocrinologist">Endocrinologist</option>
+        <option value="orthopedic">Orthopedic</option>
+        <option value="podiatrist">Podiatrist</option>
+        <option value="pelvic">Pelvic Health</option>
+        <option value="lab">Labs</option>
+        <option value="insurance">Insurance</option>
+        <option value="health-checkups">Health Checkups</option>
+        <option value="alternative">Alternative Medicine</option>
+        <option value="chiropractor">Chiropractor</option>
+        <option value="physical">Physical Therapy</option>
+      </select>
+
+
+      <!-- 👶 Pediatricians -->
+      <div class="entry pediatrician"><strong>Dr. Bernardo Huertas</strong> – Pediatrician trusted by expat families 📍 Bogotá 📞 +57 310 2288934</div>
+      <div class="entry pediatrician"><strong>Dr. Ivan Perez</strong> – Pediatrician (House Visits) 📍 Bogotá 📞 +57 318 6943044</div>
+
+      <!-- 🦷 Dentists -->
+      <div class="entry dentist"><strong>Mamuelas Kids</strong> – Pediatric dentist, friendly, some English 📍 Bogotá 📞 +57 322 7672488</div>
+      <div class="entry dentist"><strong>Consultorio Dental Bogotá</strong> – English-speaking dentist 📍 Chapinero 📞 (601) 2130290</div>
+      <div class="entry dentist"><strong>Clarita Medina</strong> – Family Dentist 📍 Bogotá 📞 +57 310 2376511</div>
+      <div class="entry dentist"><strong>Sandra Coca</strong> – Odontología 📍 Bogotá 📞 +57 311 8980671 🌐 <a href="https://odontologiaconsentido.com/" target="_blank">Website</a></div>
+      <div class="entry dentist"><strong>Dra. Luz Orozco Dentist</strong> – Odontología 📍 Bogotá 📞 +57 313 8664158 🌐 <a href="https://www.draluzorozco.com" target="_blank">Website</a></div>
+
+      <!-- 🧴 Dermatologists -->
+      <div class="entry dermatologist"><strong>Dra. Johana Rojas</strong> – Pediatric dermatologist 📍 Bogotá 📞 +57 310 2782941</div>
+      <div class="entry dermatologist"><strong>Dra. Viviana Perico</strong> – Cosmetic dermatologist 📍 Bogotá 📞 +57 314 8811993</div>
+      <div class="entry dermatologist"><strong>Vanessa Gonzalez</strong> – Recommended dermatologist 📍 Bogotá 📞 +57 300 7387730</div>
+      <div class="entry dermatologist"><strong>Dra. Ana Ma Salazar</strong> – Kids' dermatologist 📍 Cedritos 📞 +57 320 4314752</div>
+
+      <!-- 👃 ENT Specialists -->
+      <div class="entry ent"><strong>Dr. Luis Jorge Mejía</strong> – Pediatric ENT (Clínica Country) 📍 Bogotá 📞 +57 310 6746577</div>
+      <div class="entry ent"><strong>Dra. Diana Quijano</strong> – ENT specialist (Clínica Santa Fe) 📍 Bogotá 📞 +57 310 8734966 / +57 1 6200474</div>
+
+      <!-- 🩺 General & Family Doctors -->
+      <div class="entry general"><strong>Dr. Sergio Prieto</strong> – General doctor, house calls, fluent English 📍 Bogotá 📞 +57 321 4083791</div>
+      <div class="entry general"><strong>Dr. Mauricio Monroy</strong> – Family Doctor – English / Spanish 📍 Bogotá 📞 +57 316 7522390</div>
+      <div class="entry general"><strong>Dr. Andia</strong> – General Practitioner – Home Visits 📍 Bogotá 📞 +57 315 3360517</div>
+      <div class="entry general"><strong>Doctors for Expats</strong> – Online & Home Consultations + Physical Therapy 📍 Bogotá 📞 +57 302 5496963</div>
+
+      <!-- 🦵 Orthopedics & Podiatry -->
+      <div class="entry orthopedic"><strong>Dr. Manuel – Niño Ortopedista</strong> – Orthopedics / Podiatry 📍 Bogotá 📞 +57 312 3588953</div>
+      <div class="entry orthopedic"><strong>Dr. Gustavo Rincon</strong> – Ortho & Knee Specialist 📍 Bogotá 📞 +57 310 2307017</div>
+      <div class="entry podiatrist"><strong>Dr. David Alejandro Bordo</strong> – Podiatrist, Clínica Marly</div>
+
+      <!-- 🧬 Endocrinologists -->
+      <div class="entry endocrinologist"><strong>Dr. Juan José Duque Ramírez</strong> – Endocrinologist & Internist 📍 Bogotá 🌐 <a href="https://www.doctoralia.co/juan-jose-duque-ramirez/endocrinologo-internista/bogota" target="_blank">Profile</a></div>
+      <div class="entry endocrinologist"><strong>Dr. Cristian Colón</strong> – Endocrinologist 📍 Bogotá 📞 +57 301 2420846</div>
+
+      <!-- 🏠 Home Pediatric Services -->
+      <div class="entry homecare"><strong>ICare Bogotá</strong> – Pediatric home visits 📍 Citywide 📞 +57 310 5316996</div>
+      <div class="entry homecare"><strong>Pediahome</strong> – Home pediatric care 📍 Bogotá 📞 +57 320 3122725</div>
+
+      <!-- 🧘 Pelvic & Women’s Health -->
+      <div class="entry pelvic"><strong>Bibiana Kine ELISA</strong> – Pelvic & Diastasis Recti Specialist 📍 Bogotá 📞 +57 312 5877076</div>
+      <div class="entry pelvic"><strong>Dra. Marcela Lomanto Cardona</strong> – Pelvic floor therapy, tecar treatment 📍 Bogotá 🌐 <a href="https://www.instagram.com/doctoramarcelalomantoo/" target="_blank">Instagram</a> 📞 +57 311 4634232</div>
+
+      <!-- 🧪 Labs & Diagnostics -->
+      <div class="entry lab"><strong>Cendiatra</strong> – Lab Work (Sabana Park, Cajicá), Cigna Reimbursable 📍 Cajicá 📞 +57 321 4791635</div>
+
+      <!-- 💊 Insurance / Cigna -->
+      <div class="entry insurance"><strong>Cigna Contact – Santa Fe Hospital</strong> 📧 internacional@fsfb.org.co 📞 +57 320 4204201</div>
+      <div class="entry insurance"><strong>Cigna SLB Contact</strong> 📧 schlumberger@cigna.com ☎️ 1-800-841-7764</div>
+
+      <!-- 🏥 Hospitals & Clinics -->
+      <div class="entry health-checkups"><strong>Hospital LaCardio</strong> – Executive Health Checkups 📍 Cl. 119 #7-75, Usaquén 🌐 <a href="https://www.lacardio.com" target="_blank">lacardio.com</a> 📝 Highly recommended for full-day executive checkups.</div>
+
+      <!-- 🌿 Alternative Medicine -->
+      <div class="entry alternative"><strong>Dr. Jeffin Francis</strong> – Ayurvedic Doctor 📍 Bogotá 📞 +57 300 5586619</div>
+
+      <!-- 🧘 Chiropractors -->
+      <div class="entry chiropractor"><strong>Centro Quiropráctico Quiro New York</strong> – Chiropractor 📍 Bogotá 📞 +57 322 5157224</div>
+
+      <!-- 🏥 Physical Therapy -->
+      <div class="entry physical"><strong>Carolina Saenz</strong> – Ortho & Trauma Physical Therapist (Home or Chía) 📞 +57 311 8840053</div>
+
+
+      <button class="back-btn" onclick="goBack()">← Back</button>
+      <div class="spacer" style="height: 80px;"></div>
+
+    </div>
+
+    <!-- Continue with other categories below this line... -->
+        <!-- CATEGORY: Education -->
+      <div id="education" class="category-section">
+      <h2>🎓 Education</h2>
+      <p class="disclaimer-note" style="font-size: 0.75rem; color: #666; text-align: center; margin-top: 1.5rem;">* This list is shared by members and does not imply endorsement.</p>
+      <button class="top-back-btn" onclick="goBack()">← Back</button>
+
+      <div class="entry"><strong>Colegio Nueva Granada</strong><br>Prestigious American international school<br>📍 Cra 2 Este #70-20, Bogotá</div>
+      <div class="entry school"><strong>Knightsbridge Schools International</strong> – International Baccalaureate, taught in English (except PE & Spanish) 📍 Calle 221 #115-51, Bogotá 📞 +57 601 7456215 🌐 <a href="https://ksi-bogota.com/" target="_blank">Website</a></div>
+      <div class="entry school"><strong>Colegio Gran Bretaña</strong> – British & IB curriculum, English-medium instruction with Spanish & French 📍 Cra 51 #215-20, Bogotá 📞 +57 601 6760391 🌐 <a href="https://www.cgb.edu.co/" target="_blank">cgb.edu.co</a></div>
+      <div class="entry school"><strong>Colegio Anglo Colombiano</strong> – IB curriculum (PYP, MYP, DP), bilingual instruction 📍 Cra 19 #152a-48, Bogotá 📞 +57 601 2595700 🌐 <a href="https://www.anglocolombiano.edu.co" target="_blank">anglocolombiano.edu.co</a></div>
+
+      <button class="back-btn" onclick="goBack()">← Back</button>
+        <div class="spacer" style="height: 80px;"></div>
+
+    </div>
+
+    <!-- CATEGORY: Transportation -->
+    <div id="transport" class="category-section">
+      <h2>🚗 Transportation</h2>
+      <p class="disclaimer-note" style="font-size: 0.75rem; color: #666; text-align: center; margin-top: 1.5rem;">* This list is shared by members and does not imply endorsement.</p>
+      <button class="top-back-btn" onclick="goBack()">← Back</button>
+
+      <div class="entry"><strong>Yecid Gomez</strong><br>Reliable driver (Spanish only)<br>📞 +57 312 5787275</div>
+      <div class="entry"><strong>Edgar Sabogal</strong><br>Car rental and airport transport<br>📞 +57 321 2279895</div>
+      <div class="entry"><strong>Juan Carlos Sarmiento</strong><br>Trusted private driver<br>📞 +57 317 3745561</div>
+      <div class="entry"><strong>Aldo Transporte</strong><br>Private transport to Málaga/Boyacá<br>📞 +57 304 2474406</div>
+      <div class="entry"><strong>Juan (Uber)</strong><br>Well-known local Uber driver<br>📞 +57 311 4968358</div>
+      <div class="entry transport"><strong>Orlando</strong><br>Driver, Spanish-speaking (tries English when he can) 📍 Bogotá 📞 +57 321 2087317</div>
+      <div class="entry"><strong>John Pardo</strong> – Trusted taxi driver, highly recommended 📞 +57 316 3531329</div>
+
+      <button class="back-btn" onclick="goBack()">← Back</button>
+      <div class="spacer" style="height: 80px;"></div>
+
+    </div>
+
+    <!-- CATEGORY: Home Services & Childcare -->
+    <div id="home" class="category-section">
+    <h2>🧹 Home Services & Childcare</h2>
+    <p class="disclaimer-note" style="font-size: 0.75rem; color: #666; text-align: center; margin-top: 1.5rem;">* This list is shared by members and does not imply endorsement.</p>
+    <p class="disclaimer-note" style="font-size: 0.85rem; color: #555; text-align: center; margin-bottom: 1rem;">* Many listed providers offer both cleaning and childcare services.</p>
+
+    <button class="top-back-btn" onclick="goBack()">← Back</button>
+
+      <div class="entry"><strong>Maria Eugenia Sanchez</strong><br>Trusted nanny/housekeeper<br>📞 +57 322 8217161</div>
+      <div class="entry nanny"><strong>Sandra Moreno – Nana Sofi (Rox)</strong> – Trusted nanny contact shared by parents 📍 Bogotá 📞 +57 310 3343986</div>
+      
+      <button class="back-btn" onclick="goBack()">← Back</button>
+      <div class="spacer" style="height: 80px;"></div>
+
+    </div>
+
+    <!-- CATEGORY: Style & Tailoring -->
+    <div id="style" class="category-section">
+      <h2>👗 Style & Tailoring</h2>
+      <p class="disclaimer-note" style="font-size: 0.75rem; color: #666; text-align: center; margin-top: 1.5rem;">* This list is shared by members and does not imply endorsement.</p>
+      
+      <button class="top-back-btn" onclick="goBack()">← Back</button>
+
+      <div class="entry"><strong>Lea Raymond Couturiere</strong><br>Custom French dressmaking<br>📞 +57 305 2922099</div>
+      
+      <button class="back-btn" onclick="goBack()">← Back</button>
+      <div class="spacer" style="height: 80px;"></div>
+
+    </div>
+
+    <!-- CATEGORY: Pets & Vets -->
+    <div id="pets" class="category-section">
+      <h2>🐾 Pets & Vets</h2>
+      <p class="disclaimer-note" style="font-size: 0.75rem; color: #666; text-align: center; margin-top: 1.5rem;">* This list is shared by members and does not imply endorsement.</p>
+      
+      <button class="top-back-btn" onclick="goBack()">← Back</button>
+
+      <div class="entry pets"><strong>Atypical Pets</strong><br>Exotic pet care · Veterinarian · 📍 Calle 62 #35-36, Bogotá · 📞 +57 302 6841170 · 🌐 <a href="https://atypicalpets.co" target="_blank">atypicalpets.co</a></div>
+      <div class="entry pets"><strong>Brayan Leonel London Devia</strong><br>Vet, offers home visits 📍 Bogotá 📞 +57 305 8152936</div>
+      <div class="entry pets"><strong>Marcela Vásquez</strong><br>Dog trainer · Trained in English · 📞 +57 315 8623724</div>
+      <div class="entry pets"><strong>José Greiff</strong><br>Dog trainer · Will train in English commands · 📞 +57 312 5622399</div>
+
+      <button class="back-btn" onclick="goBack()">← Back</button>
+      <div class="spacer" style="height: 80px;"></div>
+
+    </div>
+
+    <!-- CATEGORY: Real Estate -->
+    <div id="realestate" class="category-section">
+      <h2>🏡 Real Estate</h2>
+      <p class="disclaimer-note" style="font-size: 0.75rem; color: #666; text-align: center; margin-top: 1.5rem;">* This list is shared by members and does not imply endorsement.</p>
+      
+      <button class="top-back-btn" onclick="goBack()">← Back</button>
+
+      <div class="entry"><strong>Carlos Gonzalez IMMO</strong><br>Embassy-experienced, English speaker<br>📞 +57 310 3362045</div>
+      <div class="entry"><strong>Rapha Garing</strong><br>Luxury homes, speaks French/Spanish/English<br>📞 +57 310 2746388</div>
+      
+      <button class="back-btn" onclick="goBack()">← Back</button>
+      <div class="spacer" style="height: 80px;"></div>
+
+    </div>
+
+    <!-- CATEGORY: Food & Markets -->
+    <div id="food" class="category-section">
+      <h2>🛒 Food & Markets</h2>
+           <p class="disclaimer-note" style="font-size: 0.75rem; color: #666; text-align: center; margin-top: 1.5rem;">* This list is shared by members and does not imply endorsement.</p>
+      
+      <button class="top-back-btn" onclick="goBack()">← Back</button>
+
+      <div class="entry"><strong>Carulla</strong><br>Premium grocery store, online delivery available</div>
+      <div class="entry"><strong>Artisan Bakeries</strong><br>Highly recommended for sourdough, baguettes (shared in group chat)</div>
+      <div class="entry"><strong>Marketplace at 93 Park</strong><br>Weekend organic markets – check timing</div>
+      <div class="entry"><strong>Organic Shop</strong> – Organic groceries, fresh produce, grains & treats. 📍 Carrera 15 #86a-37, Chapinero</div>
+
+     <button class="back-btn" onclick="goBack()">← Back</button>
+      <div class="spacer" style="height: 80px;"></div>
+
+    </div>
+
+    <!-- CATEGORY: Tech & Repairs -->
+    <div id="tech" class="category-section">
+      <h2>💻 Tech & Repairs</h2>
+      <p class="disclaimer-note" style="font-size: 0.75rem; color: #666; text-align: center; margin-top: 1.5rem;">* This list is shared by members and does not imply endorsement.</p>
+      <button class="top-back-btn" onclick="goBack()">← Back</button>
+
+      <div class="entry"><strong>Miguel</strong><br>Kids robotics, physics & coding classes<br>📞 +7 999 099-31-81</div>
+      <div class="entry"><strong>Encrypt Gallery</strong><br>Fast, reliable phone repairs<br>📞 +57 316 6468081</div>
+     
+      <button class="back-btn" onclick="goBack()">← Back</button>
+      <div class="spacer" style="height: 80px;"></div>
+
+    </div>
+
+    <!-- CATEGORY: Kids Activities -->
+    <div id="kids" class="category-section">
+      <h2>🎉 Kids Activities</h2>
+      <p class="disclaimer-note" style="font-size: 0.75rem; color: #666; text-align: center; margin-top: 1.5rem;">* This list is shared by members and does not imply endorsement.</p>
+      <button class="top-back-btn" onclick="goBack()">← Back</button>
+
+      <div class="entry"><strong>Cinemania</strong><br>Kid-friendly weekend shows<br>📍 Carrera 14, Calle 93b</div>
+      <div class="entry"><strong>Plaza Claro Cinema</strong><br>Short intermission & games inside</div>
+      <div class="entry"><strong>Diversaltos Lina Arias</strong><br>Inflatable rentals for events<br>📞 +57 318 7080689</div>
+      <div class="entry"><strong>Ukelele Fiestas Bogotá</strong><br>Party entertainment for kids<br>📞 +57 313 3333635</div>
+      <div class="entry"><strong>Arte Vibrante</strong><br>Creative art classes for kids<br>🌐 www.artevibrante.org</div>
+     
+      <button class="back-btn" onclick="goBack()">← Back</button>
+      <div class="spacer" style="height: 80px;"></div>
+
+    </div>
+
+    <!-- CATEGORY: Fitness & Trainers -->
+    <div id="fitness" class="category-section">
+      <h2>🏋️‍♀️ Fitness & Trainers</h2>
+      <p class="disclaimer-note" style="font-size: 0.75rem; color: #666; text-align: center; margin-top: 1.5rem;">* This list is shared by members and does not imply endorsement.</p>
+      <button class="top-back-btn" onclick="goBack()">← Back</button>
+
+      <div class="entry"><strong>Tata</strong><br>Pilates + home services<br>📧 pilatessynergy@hotmail.com<br>📞 +57 313 8282946</div>
+      <div class="entry"><strong>Alberto Guerrero</strong><br>Personal trainer – at-home sessions<br>📞 +57 310 2521520</div>
+      <div class="entry"><strong>Angel Hidalgo</strong><br>Kickboxing / MMA trainer<br>📞 +57 315 8543182</div>
+      <div class="entry"><strong>Steven Hernández Sanchez</strong> – Group training: running, cycling, swimming. Small group sessions & weekend outings. 📞 +57 313 5121473</div>
+
+     
+      <button class="back-btn" onclick="goBack()">← Back</button>
+      <div class="spacer" style="height: 80px;"></div>
+
+    </div>
+
+    <!-- CATEGORY: Spa & Wellness -->
+    <div id="spa" class="category-section">
+    <h2>🧖‍♀️ Spa & Wellness</h2>
+      <p class="disclaimer-note" style="font-size: 0.75rem; color: #666; text-align: center; margin-top: 1.5rem;">* This list is shared by members and does not imply endorsement.</p>
+      <button class="top-back-btn" onclick="goBack()">← Back</button>
+  
+      <div class="entry"><strong>One Spa</strong> – Massage services, inside Ibis Hotel Chía 📍 Chía 📞 +57 311 2707329</div>
+      <div class="entry"><strong>Bayi Spa</strong> – Massages and ceremonies (Spanish) 📍 Bogotá 📞 +57 315 7173464</div>
+      <div class="entry"><strong>Bogo Thai Massage</strong> – Deep tissue Thai massage 📍 Usaquén & Chapinero</div>
+      <div class="entry"><strong>Lucia Montoya</strong> – Nails at home 📞 +57 313 2917992</div>
+      <div class="entry"><strong>Dr. Jeffin Francis</strong> – Ayurvedic doctor 📍 Bogotá 📞 +57 300 5586619</div>
+
+      <button class="back-btn" onclick="goBack()">← Back</button>
+      <div class="spacer" style="height: 80px;"></div>
+
+    </div>
+
+     <!-- CATEGORY: Travel & Destinations -->
+    <div id="travel" class="category-section">
+      <h2>🏥 Travel & Destinations </h2>
+      <p class="disclaimer-note" style="font-size: 0.75rem; color: #666; text-align: center; margin-top: 1.5rem;">* This list is shared by members and does not imply endorsement.</p>
+      
+      <button class="top-back-btn" onclick="goBack()">← Back</button>
+
+      <div class="entry"><strong>Tito Zavala</strong> – Adventure tour guide for Peru & South America. Cycling, hiking, tailored trips. 📍 Lima, Perú 📞 +51 956 343373 🌐 <a href="https://wa.me/51956343373" target="_blank">WhatsApp</a></div>
+     
+      <button class="back-btn" onclick="goBack()">← Back</button>
+      <div class="spacer" style="height: 80px;"></div>
+
+    </div>
+
+    <!-- SUGGEST LISTING -->
+    <div id="suggest" class="category-section">
+    <h2>💡 Suggest a Listing</h2>
+    <p class="disclaimer-note" style="font-size: 0.75rem; color: #666; text-align: center; margin-top: 1.5rem;">* This list is shared by members and does not imply endorsement.</p>
+     
+      <iframe 
+        src="https://docs.google.com/forms/d/e/1FAIpQLSf_fX6KJCG0mbsJ7bHpJZQR4G_khKoPhn_FzB3cVs0_k-4MVQ/viewform?embedded=true" 
+        width="100%" 
+        height="1800" 
+        frameborder="0" 
+        marginheight="0" 
+        marginwidth="0" 
+        style="border-radius: 10px; background: #fff;">
+        Loading…
+      </iframe>
+      
+      <button class="back-btn" onclick="goBack()">← Back</button>
+      <div class="spacer" style="height: 80px;"></div>
+
+    </div>
+<!-- DISCLAIMER -->
+    <div id="disclaimer" class="category-section">
+      <h2>⚠️ Disclaimer</h2>
+        <p>This directory is compiled by members of the Expat Parents in Bogotá group and is intended strictly as a community resource. It is not an endorsement of any individual or business listed herein.</p>
+        <p>The administrators and contributors of this directory are all unpaid volunteers. We do not accept responsibility or liability for any outcome resulting from the use of information or services shared in this directory.</p>
+        <p>In accordance with Colombian consumer law (Derecho de Petición / PQR), we clarify that this group does not operate as a business or registered organization offering services to the public. No formal commercial services are offered or sold via this platform.</p>
+        <p>If you have concerns about the content or functioning of this group, you may contact the admin team through the <strong>👩‍💻 Admin Contact</strong> section. Please remember that we are all volunteers managing this space in our free time.</p>
+        <p>All listings should be verified by you, and used at your own discretion.</p>
+      <button class="back-btn" onclick="goBack()">← Back</button>
+      <div class="spacer" style="height: 80px;"></div>
+
+    </div>
+    <!-- ADMIN PANEL -->
+    <div id="admin-panel" class="category-section">
+      <h2>👩‍💻 Admin Contact</h2>
+      <p>If you have any issues, please contact one of our admins:</p>
+      <div class="entry">
+        <strong>Admin Team</strong><br>
+        Hanny, Jessica, Karina, Lina, Luis, Maria José, Nico, Pascal, Sandra, and Yammit
+      </div>
+      <p style="margin-top:1rem;">📧 <a href="mailto:expatparentsinbogota@gmail.com">expatparentsinbogota@gmail.com</a></p>
+      <button class="back-btn" onclick="goBack()">← Back</button>
+      <div class="spacer" style="height: 80px;"></div>
+
+    </div>
+  </div> <!-- END .app-wrapper -->
+
+  <!-- OUTSIDE of .app-wrapper -->
+<div class="footer-nav-wrapper">
+  <div class="footer-nav">
+    <button onclick="showCategory('suggest')">💡 Suggest Listing</button>
+    <button onclick="showCategory('admin-panel')">👩‍💻 Admin Contact</button>
+    <button onclick="showCategory('disclaimer')">⚠️ Disclaimer</button>
+  </div>
+</div>
+
+
+  <!-- SCRIPT -->
+  <script>
+    function showCategory(id) {
+      document.getElementById('mainMenu').style.display = 'none';
+      document.querySelectorAll('.category-section').forEach(section => section.classList.remove('active'));
+      const target = document.getElementById(id);
+      if (target) target.classList.add('active');
+    }
+
+    function goBack() {
+      document.querySelectorAll('.category-section').forEach(section => section.classList.remove('active'));
+      document.getElementById('mainMenu').style.display = 'grid';
+    }
+
+    function filterDoctors() {
+      const selected = document.getElementById('doctorFilter').value;
+      const entries = document.querySelectorAll('#health .entry');
+      entries.forEach(entry => {
+        if (selected === 'all') {
+          entry.style.display = 'block';
+        } else {
+          entry.style.display = entry.classList.contains(selected) ? 'block' : 'none';
+        }
+      });
+    }
+  </script>
+</body>
+</html>
+
+    
